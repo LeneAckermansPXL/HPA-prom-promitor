@@ -1,0 +1,33 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: custom-hpa
+  namespace: monitoring # nog onbekend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: xxx-deployment # nog onbekend
+  minReplicas: 1
+  maxReplicas: 20
+  metrics:
+  - type: Pods
+    pods:
+      metric:
+        name: queue_size
+      target:
+        type: AverageValue
+        averageValue: 1  # 1 ActiveMessage
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 40 # aantal seconden dat threshold onder averageValue is -> scaling down
+      policies:
+      - type: Pods
+        value: 1 # scaled down per value
+        periodSeconds: 20 # elke zoveel seconden wordt er downgescaled
+    scaleUp:
+      stabilizationWindowSeconds: 20 # aantal seconden dat threshold over averageValue is -> scaling up
+      policies:
+      - type: Pods
+        value: 2 # scaled up per value
+        periodSeconds: 20 # elke zoveel seconden wordt er upgescaled

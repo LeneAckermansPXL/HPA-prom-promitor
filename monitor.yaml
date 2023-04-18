@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: promitor-scraper
+  labels:
+    prometheus: prometheus
+    app: promitor-scraper
+spec:
+  selector:
+    matchLabels:
+      app: promitor-scraper 
+  endpoints:
+  - port: http
+    Path: /prometheus/scrape
+    interval: 15s

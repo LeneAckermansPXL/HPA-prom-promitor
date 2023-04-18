@@ -1,0 +1,30 @@
+azureAuthentication:
+  appId: "" # [Deprecated] Prefer identity.id
+  appKey: "" # [Deprecated] Prefer identity.key
+  mode: "ServicePrincipal" # ServicePrincipal (default), UserAssignedManagedIdentity or SystemAssignedManagedIdentity
+  identity:
+    id: "" #invullen
+    key: "" # invullen
+    binding: "" # Aad Pod Identity name, when using UserAssignedManagedIdentity or SystemAssignedManagedIdentity as mode
+azureMetadata:
+  tenantId: ""
+  subscriptionId: ""
+  resourceGroupName: myResourceGroup
+metricDefaults:
+  aggregation:
+    interval: 00:01:00 # Intervals van 1 minute
+  scraping:
+    schedule: "0,30 * * * *" # cron job format, scrapet elke 0de en 30ste minuut bv. 13:00 en 13:30
+metrics:
+  - name: queue_size # naam naar keuze, maar duidelijk wat het is 
+    description: "Amount of active messages in the queue"
+    resourceType: ServiceBusQueue
+    namespace: monitoring
+    queueName: jobs
+    scraping:
+      schedule: "0,30 */2 * * *" # scrapet elke 0de en 30ste minuut om de 2 uur
+    azureMetricConfiguration:
+      metricName: ActiveMessages # Alle active messages in de service bus queue
+      aggregation:
+        type: Total
+        interval: 00:01:00

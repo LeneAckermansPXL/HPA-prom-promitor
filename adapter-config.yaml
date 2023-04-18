@@ -1,0 +1,11 @@
+prometheus:
+  url: "http://prom-prometheus-server.default.svc"
+  port: 80
+
+rules:
+  default: false
+  custom:
+    - seriesQuery: queue_size{service="promitor-scraper"}
+      resources:
+        template: <<.Resource>>
+      metricsQuery: (<<.Series>> { <<.LabelMatchers>> })

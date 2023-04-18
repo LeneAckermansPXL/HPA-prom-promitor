@@ -1,0 +1,14 @@
+serverFiles:
+  alerting_rules.yml:
+    groups:
+    - name: pod memory test
+      rules:
+      - alert: High Pod Memory
+        expr: sum(container_memory_usage_bytes) > 1
+        for: 1m
+        labels:
+          severity: slack
+        annotations:
+          summary: High Memory Usage # deze zal altijd worden getriggerd
+    
+    
